@@ -199,6 +199,17 @@ angular.module('ui.select2', []).value('uiSelect2Config', {}).directive('uiSelec
           // important!
           controller.$render();
 
+	  // Fix for flickering issue where drop downs get rendered with default styles first and then
+	  // style is applied later.
+	  //
+	  // * http://stackoverflow.com/questions/24999108/angular-ui-select2-hide-initial-drawing-rendering-of-component
+	  //
+	  // Work-around is to hide the element until it is ready to be rendered with style.
+	  //
+	  // Note, this will unhide any select2 element that was purposefully hidden.  I don't think we have those...
+	  //
+	  elm.prev().css({"visibility": "visible"});
+
           // Not sure if I should just check for !isSelect OR if I should check for 'tags' key
           if (!opts.initSelection && !isSelect) {
             controller.$setViewValue(
